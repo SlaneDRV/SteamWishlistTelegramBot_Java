@@ -1,15 +1,38 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ */
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+
+
+/**
+ *
+ * @author Anton Sasnouski
+ */
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+public class Main {
+    public static void main(String[] args) throws TelegramApiException {
+        // Создание экземпляра бота и его регистрация
+        Handlers bot = new Handlers();
+        
+        // Регистрация бота через TelegramBotsApi
+        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+        try {
+            botsApi.registerBot(bot);
+            DataManager.preloadDatabase().thenRun(() -> {
+                try {
+                    botsApi.registerBot(bot);
+                    System.out.println("Bot successfully started!");
+                } catch (TelegramApiException e) {
+                    System.out.println("Failed to register bot: " + e.getMessage());
+                }
+            });
+            
+        } catch (TelegramApiException e) {
         }
     }
 }
+
+
