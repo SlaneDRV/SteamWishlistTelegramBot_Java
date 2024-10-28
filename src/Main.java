@@ -14,10 +14,9 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
-        // Создание экземпляра бота и его регистрация
+
         Handlers bot = new Handlers();
-        
-        // Регистрация бота через TelegramBotsApi
+
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             botsApi.registerBot(bot);

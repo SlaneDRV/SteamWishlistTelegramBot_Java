@@ -73,8 +73,11 @@ public class DataManager {
         }
     }
 
+
     public static List<JSONObject> sortWishlistByDate(List<JSONObject> wishlist, Map<String, Object> database) {
         List<Map.Entry<JSONObject, LocalDate>> sortedWishlist = new ArrayList<>();
+
+        DateTimeFormatter standardFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
 
         for (JSONObject game : wishlist) {
             String gameId = game.optString("ID");
@@ -83,7 +86,8 @@ public class DataManager {
                 if (!dbGame.isEmpty()) {
                     JSONObject gameData = dbGame.get(0);
                     String releaseDate = gameData.optString("ReleaseDate");
-                    LocalDate parsedDate = parseReleaseDate(releaseDate);
+
+                    LocalDate parsedDate = parseReleaseDate(releaseDate, standardFormatter);
                     if (parsedDate != null) {
                         sortedWishlist.add(new AbstractMap.SimpleEntry<>(game, parsedDate));
                     }
@@ -91,9 +95,25 @@ public class DataManager {
             }
         }
 
-        sortedWishlist.sort((x, y) -> y.getValue().compareTo(x.getValue())); // Сортировка по дате, от более новой к более старой
+        sortedWishlist.sort((x, y) -> y.getValue().compareTo(x.getValue()));
         return sortedWishlist.stream().map(Map.Entry::getKey).collect(Collectors.toList());
     }
+
+    private static LocalDate parseReleaseDate(String releaseDate, DateTimeFormatter standardFormatter) {
+        try {
+            if (releaseDate.equalsIgnoreCase("To be announced")) {
+                return LocalDate.MAX;
+            } else if (releaseDate.matches("\\d{4}")) {
+                return LocalDate.parse(releaseDate + "-01-01");
+            } else {
+                return LocalDate.parse(releaseDate, standardFormatter);
+            }
+        } catch (DateTimeParseException e) {
+
+            return null;
+        }
+    }
+
 
     public static List<JSONObject> sortWishlistByReviews(List<JSONObject> wishlist, Map<String, Object> database) {
         List<Map.Entry<JSONObject, Integer>> sortedWishlist = new ArrayList<>();
@@ -112,8 +132,14 @@ public class DataManager {
             }
         }
 
-        sortedWishlist.sort((x, y) -> Integer.compare(y.getValue(), x.getValue())); // Сортировка по количеству отзывов
+        sortedWishlist.sort((x, y) -> Integer.compare(y.getValue(), x.getValue()));
         return sortedWishlist.stream().map(Map.Entry::getKey).collect(Collectors.toList());
+    }
+
+    public static List<JSONObject> sortWishlistByAlphabet(List<JSONObject> wishlist) {
+
+        wishlist.sort(Comparator.comparing(game -> game.optString("Name", "").toLowerCase()));
+        return wishlist;
     }
 
     private static double calculateLevenshteinSimilarity(String s1, String s2) {
@@ -134,14 +160,13 @@ public class DataManager {
                     dp[i][j] = Math.min(Math.min(
                             dp[i - 1][j] + 1, 
                             dp[i][j - 1] + 1), 
-                            dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1)); // замена
+                            dp[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1));
                 }
             }
         }
         return dp[s1.length()][s2.length()];
     }
 
-    // Функция для поиска игр по тегу
     public static List<Map.Entry<String, JSONObject>> findGamesByTag(String searchTag, Map<String, Object> database) {
         System.out.println("Starting the search for games by tag...");
 
@@ -168,7 +193,7 @@ public class DataManager {
                 }
 
                 Map<String, Object> gameDataMap = (Map<String, Object>) gameDataObj;
-                JSONObject gameData = new JSONObject(gameDataMap); // Приведение к JSONObject
+                JSONObject gameData = new JSONObject(gameDataMap);
 
                 if (gameData.isEmpty()) {
                     System.out.println("Game data is empty for game ID: " + gameId);
@@ -203,7 +228,6 @@ public class DataManager {
 
         List<Map.Entry<String, JSONObject>> sortedResults = new ArrayList<>(results.entrySet());
 
-        // Сортировка по количеству отзывов
         sortedResults.sort((entry1, entry2) -> {
             int totalReviews1 = entry1.getValue().optInt("PositiveReviews", 0) + entry1.getValue().optInt("NegativeReviews", 0);
             int totalReviews2 = entry2.getValue().optInt("PositiveReviews", 0) + entry2.getValue().optInt("NegativeReviews", 0);
@@ -218,24 +242,24 @@ public class DataManager {
     public static List<Map.Entry<String, JSONObject>> findGamesByName(String gameName, Map<String, Object> database) {
         System.out.println("Search games by name has been started.");
         Map<String, JSONObject> results = new HashMap<>();
-        String searchQuery = gameName.toLowerCase().replace(" ", ""); // Преобразуем запрос к нижнему регистру и убираем пробелы
+        String searchQuery = gameName.toLowerCase().replace(" ", "");
 
         for (Map.Entry<String, Object> entry : database.entrySet()) {
             String gameId = entry.getKey();
             Object gameDataObj = entry.getValue();
 
-            // Проверяем, что gameDataObj является Map, как в findGamesByTag
+
             if (!(gameDataObj instanceof Map)) {
                 System.out.println("Invalid game data for game ID: " + gameId);
                 continue;
             }
 
             Map<String, Object> gameDataMap = (Map<String, Object>) gameDataObj;
-            JSONObject gameData = new JSONObject(gameDataMap); // Приводим объект к JSONObject для дальнейшей работы
+            JSONObject gameData = new JSONObject(gameDataMap);
 
             String name = gameData.optString("Name").toLowerCase().replace(" ", "");
 
-            // Расчет схожести через Levenshtein
+
             double ratio = calculateLevenshteinSimilarity(searchQuery, name);
 
             if (ratio > 0.7 || name.contains(searchQuery)) {
@@ -244,7 +268,6 @@ public class DataManager {
             }
         }
 
-        // Сортировка результатов по количеству отзывов
         List<Map.Entry<String, JSONObject>> sortedResults = new ArrayList<>(results.entrySet());
         sortedResults.sort((x, y) -> {
             int totalReviews1 = x.getValue().optInt("PositiveReviews", 0) + x.getValue().optInt("NegativeReviews", 0);
@@ -253,10 +276,9 @@ public class DataManager {
         });
 
         System.out.println("Search games by name is done.");
-        return sortedResults.stream().limit(10).collect(Collectors.toList()); // Ограничение до 10 результатов
+        return sortedResults.stream().limit(10).collect(Collectors.toList());
     }
 
-    // Функция для поиска игры по точному названию
     public static List<JSONObject> findGameByExactName(String gameName, Map<String, Object> database) {
         System.out.println("Search game by exact name has been started.");
         List<JSONObject> results = new ArrayList<>();
@@ -275,22 +297,20 @@ public class DataManager {
             String name = gameData.optString("Name").toLowerCase().trim();
             if (name.equals(searchQuery)) {
                 int totalReviews = gameData.optInt("PositiveReviews", 0) + gameData.optInt("NegativeReviews", 0);
-                gameData.put("TotalReviews", totalReviews);  // Сохраняем общее количество отзывов в объекте игры
+                gameData.put("TotalReviews", totalReviews);
                 results.add(gameData);
             }
         }
 
-        results.sort((x, y) -> Integer.compare(y.optInt("TotalReviews", 0), x.optInt("TotalReviews", 0))); // Сортировка по количеству отзывов
+        results.sort((x, y) -> Integer.compare(y.optInt("TotalReviews", 0), x.optInt("TotalReviews", 0)));
         System.out.println("Search game by exact name is done.");
         return results.stream().limit(1).collect(Collectors.toList());
     }
 
-    // Вспомогательная функция для поиска игры по ID
-    // Вспомогательная функция для поиска игры по ID
     public static List<JSONObject> findGameByExactId(String gameId, Map<String, Object> database) {
         System.out.println("Search game by exact id has been started.");
         List<JSONObject> results = new ArrayList<>();
-        String searchQuery = String.valueOf(gameId).trim();  // Преобразование ID в строку для сравнения
+        String searchQuery = String.valueOf(gameId).trim();
 
         for (Map.Entry<String, Object> entry : database.entrySet()) {
             Object gameDataObj = entry.getValue();
@@ -300,19 +320,18 @@ public class DataManager {
                 continue;
             }
 
-            String dbGameIdStr = String.valueOf(((Map<String, Object>) gameDataObj).get("ID")).trim();  // Извлечение ID из Map
+            String dbGameIdStr = String.valueOf(((Map<String, Object>) gameDataObj).get("ID")).trim();
             if (dbGameIdStr.equals(searchQuery)) {
-                results.add(new JSONObject((Map<String, Object>) gameDataObj));  // Приведение к JSONObject
+                results.add(new JSONObject((Map<String, Object>) gameDataObj));
             }
         }
 
         System.out.println("Search game by exact id is done.");
-        return results.isEmpty() ? new ArrayList<>() : results.subList(0, 1);  // Возвращаем только первый результат
+        return results.isEmpty() ? new ArrayList<>() : results.subList(0, 1);
     }
 
     private static final String WISHLIST_DIR = "Wishlists";
 
-    // Форматирование списка игр для отображения
     public static String formatGameList(List<JSONObject> games) {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < games.size(); i++) {
@@ -328,19 +347,17 @@ public class DataManager {
         return message.toString();
     }
 
-    // Получение пути к файлу списка желаемого
     private static String getWishlistPath(long userId) {
         return WISHLIST_DIR + File.separator + userId + "_wishlist.json";
     }
 
-    // Чтение списка желаемого из файла
     public static List<JSONObject> readWishlist(long userId) {
         String filename = getWishlistPath(userId);
         System.out.println("Reading wishlist from: " + filename);
 
         if (!Files.exists(Paths.get(filename))) {
             System.out.println("Wishlist file does not exist: " + filename);
-            return new ArrayList<>();  // Если файл не найден, возвращаем пустой список
+            return new ArrayList<>();
         }
 
         try {
@@ -356,14 +373,13 @@ public class DataManager {
 
         } catch (IOException e) {
             System.out.println("Error reading wishlist file: " + e.getMessage());
-            return new ArrayList<>();  // Если файл не найден, возвращаем пустой список
+            return new ArrayList<>();
         } catch (JSONException e) {
             System.out.println("Invalid JSON format in wishlist file: " + e.getMessage());
-            return new ArrayList<>();  // Возвращаем пустой список в случае ошибки парсинга
+            return new ArrayList<>();
         }
     }
 
-    // Сохранение списка желаемого в файл
     public static void saveWishlist(long userId, List<JSONObject> wishlist) {
         String filename = getWishlistPath(userId);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
@@ -374,11 +390,9 @@ public class DataManager {
         }
     }
 
-    // Добавление игры в список желаемого
     public static List<JSONObject> addGameToWishlist(long userId, JSONObject game) {
         List<JSONObject> wishlist = readWishlist(userId);
 
-        // Проверяем, есть ли игра в списке желаемого
         if (!checkWishlist(userId, game.optString("Name"))) {
             wishlist.add(game);
             saveWishlist(userId, wishlist);
@@ -388,25 +402,22 @@ public class DataManager {
         return wishlist;
     }
 
-// Проверка, есть ли игра в списке желаемого
     public static boolean checkWishlist(long userId, String gameName) {
         List<JSONObject> wishlist = readWishlist(userId);
 
         for (JSONObject game : wishlist) {
             if (game.optString("Name").equals(gameName)) {
-                return true;  // Игра уже в списке желаемого
+                return true;
             }
         }
-        return false;  // Игра не найдена в списке желаемого
+        return false;
     }
 
-    // Получение количества игр в списке желаемого
     public static int getWishlistCount(long userId) {
         List<JSONObject> wishlist = readWishlist(userId);
         return wishlist.size();
     }
 
-    // Удаление игры из списка желаемого
     public static List<JSONObject> removeGameFromWishlist(long userId, String gameName) {
         System.out.println("Remove game from wishlist of user: " + userId);
         List<JSONObject> wishlist = readWishlist(userId);
@@ -436,7 +447,6 @@ public class DataManager {
         return filename;
     }
 
-    // Фильтрация полей списка желаемого
     public static List<JSONObject> filterWishlistFields(List<JSONObject> wishlist) {
         List<JSONObject> filteredWishlist = new ArrayList<>();
 
@@ -451,7 +461,6 @@ public class DataManager {
         return filteredWishlist;
     }
 
-    // Генерация JSON файла списка желаемого
     public static String generateWishlistFileJson(long userId) {
         List<JSONObject> wishlist = readWishlist(userId);
         List<JSONObject> filteredWishlist = filterWishlistFields(wishlist);
@@ -466,10 +475,12 @@ public class DataManager {
         return filename;
     }
 
-    // Генерация YAML файла списка желаемого
     public static String generateWishlistFileYaml(long userId) {
         List<JSONObject> wishlist = readWishlist(userId);
-        List<JSONObject> filteredWishlist = filterWishlistFields(wishlist);
+        List<Map<String, Object>> filteredWishlist = filterWishlistFields(wishlist).stream()
+                .map(JSONObject::toMap)
+                .collect(Collectors.toList());
+
         String filename = String.format("wishlist_%d.yaml", userId);
 
         Yaml yaml = new Yaml();
@@ -482,7 +493,6 @@ public class DataManager {
         return filename;
     }
 
-    // Чтение JSON файла списка желаемого
     public static List<JSONObject> readJsonWishlist(long userId) {
         String filename = getWishlistPath(userId);
 
@@ -495,19 +505,17 @@ public class DataManager {
             }
             return existingData;
         } catch (IOException e) {
-            return new ArrayList<>();  // Если файл не найден, возвращаем пустой список
+            return new ArrayList<>();
         }
     }
 
-    // Импорт списка желаемого
     public static void importWishlist(long userId, List<JSONObject> importedData) {
-        // Читаем существующие данные из вишлиста
+
         List<JSONObject> existingData = readJsonWishlist(userId);
 
-        // Добавляем импортированные данные к существующим данным
+
         existingData.addAll(importedData);
 
-        // Записываем обновленные данные обратно в файл
         String filename = getWishlistPath(userId);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write(existingData.toString());
@@ -516,7 +524,6 @@ public class DataManager {
         }
     }
 
-    // Чтение файла списка желаемого
     public static List<JSONObject> readWishlistFile(String filepath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
             StringBuilder content = new StringBuilder();
@@ -529,6 +536,7 @@ public class DataManager {
             for (int i = 0; i < jsonArray.length(); i++) {
                 wishlist.add(jsonArray.getJSONObject(i));
             }
+
             return wishlist;
         } catch (FileNotFoundException e) {
             return new ArrayList<>();
@@ -542,38 +550,41 @@ public class DataManager {
     }
 
     public static void mergeWishlists(long userId, List<JSONObject> importedData) {
-        // Чтение существующего вишлиста пользователя
+
         List<JSONObject> currentWishlist = readWishlist(userId);
 
-        // Добавление импортированных данных к существующему вишлисту
-        for (JSONObject game : importedData) {
-            if (!currentWishlist.contains(game)) {
-                currentWishlist.add(game);
+        for (JSONObject importedGame : importedData) {
+            String importedGameId = importedGame.optString("ID");
+            String importedGameName = importedGame.optString("Name");
+
+            boolean existsInWishlist = currentWishlist.stream().anyMatch(existingGame ->
+                    importedGameId.equals(existingGame.optString("ID")) &&
+                            importedGameName.equals(existingGame.optString("Name"))
+            );
+
+            if (!existsInWishlist) {
+                currentWishlist.add(importedGame);
             }
         }
 
-        // Сохранение обновленного вишлиста
         saveWishlist(userId, currentWishlist);
     }
 
-    // Обновление списка желаемого
     public static void updateWishlist(long userId, List<JSONObject> importedData) {
-        // Чтение текущего вишлиста пользователя
+
         List<JSONObject> currentWishlist = readWishlist(userId);
 
-        // Извлечение ID, Name и Price из импортированных данных и добавление в текущий вишлист
         for (JSONObject game : importedData) {
             String gameId = game.optString("ID");
             String gameName = game.optString("Name");
             String gamePrice = game.optString("Price");
 
-            // Проверка наличия игры по ID и имени в базе данных
             if (!gameId.isEmpty() && !gameName.isEmpty()) {
                 List<JSONObject> existingGameById = findGameByExactId(gameId, DATABASE);
                 List<JSONObject> existingGameByName = findGameByExactName(gameName, DATABASE);
 
                 if (!existingGameById.isEmpty() && !existingGameByName.isEmpty()) {
-                    // Если найдены совпадения по ID и по имени, добавляем игру в вишлист
+
                     JSONObject gameInfo = new JSONObject();
                     gameInfo.put("ID", gameId);
                     gameInfo.put("Name", gameName);
@@ -581,37 +592,34 @@ public class DataManager {
                     if (!currentWishlist.contains(gameInfo)) {
                         currentWishlist.add(gameInfo);
                     } else {
-                        // Выводим сообщение, что игра не найдена в базе данных
+
                         System.out.println("Game with ID " + gameId + " and Name " + gameName + " exists on the wishlist.");
                     }
                 } else {
-                    // Выводим сообщение, что игра не найдена в базе данных
+
                     System.out.println("Game with ID " + gameId + " and Name " + gameName + " not found in the database.");
                 }
             } else {
-                // Выводим сообщение, что ID или Name игры отсутствуют
+
                 System.out.println("Invalid game data received: ID=" + gameId + ", Name=" + gameName);
             }
         }
 
-        // Сохранение обновленного вишлиста
         saveWishlist(userId, currentWishlist);
     }
 
-    // Чтение текстового файла
     public static List<JSONObject> readTxtFile(byte[] fileContent) {
         List<JSONObject> importedData = new ArrayList<>();
         String content = new String(fileContent);
         String[] lines = content.strip().split("\n");
 
         for (String line : lines) {
-            // Разделение строки по последнему " - "
+
             int lastDashIndex = line.lastIndexOf(" - ");
             if (lastDashIndex != -1) {
                 String idAndName = line.substring(0, lastDashIndex);
-                String price = line.substring(lastDashIndex + 3); // +3 чтобы пропустить " - "
+                String price = line.substring(lastDashIndex + 3);
 
-                // Извлечение ID
                 int firstColonIndex = idAndName.indexOf(':');
                 if (firstColonIndex != -1) {
                     String gameId = idAndName.substring(0, firstColonIndex).trim();
@@ -628,16 +636,46 @@ public class DataManager {
                 System.out.println("Error parsing line (Price): " + line);
             }
         }
-
+        System.out.println(" Successfuly readig of TXT FILE !!!");
         return importedData;
     }
 
-    // Чтение YAML файла
     public static List<JSONObject> readYamlFile(byte[] fileContent) {
         Yaml yaml = new Yaml();
-        List<JSONObject> importedData = yaml.loadAs(new ByteArrayInputStream(fileContent), List.class
-        );
-        return importedData != null ? importedData : new ArrayList<>();
+        List<JSONObject> importedData = new ArrayList<>();
+
+        List<Map<String, Object>> yamlData = yaml.load(new ByteArrayInputStream(fileContent));
+        if (yamlData != null) {
+            for (Map<String, Object> gameData : yamlData) {
+
+                importedData.add(new JSONObject(gameData));
+            }
+        }
+        System.out.println(" Successfuly readig of YAML FILE !!!");
+        return importedData;
     }
 
+
+
+
+    public static List<JSONObject> readJosnFile(byte[] downloadedFile) {
+        List<JSONObject> gamesList = new ArrayList<>();
+
+        try {
+
+            String jsonContent = new String(downloadedFile);
+            JSONArray jsonArray = new JSONArray(jsonContent);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject game = jsonArray.getJSONObject(i);
+                gamesList.add(game);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error reading JSON file: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return gamesList;
+    }
 }
