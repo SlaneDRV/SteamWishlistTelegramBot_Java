@@ -1,6 +1,6 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -11,9 +11,10 @@ import java.util.List;
 
 public class Removing {
 
-    private Message message = new Message();
+    private final Message message = new Message();
+    private final WishlistFunctions Wishlist = new WishlistFunctions();
     public void promptForGameRemoval(long chatId) {
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
         if (wishlist.isEmpty()) {
             message.sendMessage(chatId, "Your wishlist is empty.");
             return;
@@ -35,7 +36,7 @@ public class Removing {
 
     public void removeGameFromWishlistCallback(CallbackQuery call) {
         String gameName = call.getData().split("_", 2)[1];
-        DataManager.removeGameFromWishlist(call.getMessage().getChatId(), gameName);
+        WishlistFunctions.removeGameFromWishlist(call.getMessage().getChatId(), gameName);
 
         String currentText = call.getMessage().getText();
         String newText = gameName + " removed from your wishlist.";

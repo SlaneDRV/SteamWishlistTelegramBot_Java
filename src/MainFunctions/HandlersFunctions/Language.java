@@ -1,6 +1,7 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.FindExactGame;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -15,7 +16,7 @@ public class Language {
         String gameId = call.getData().split("_", 2)[1];
         long chatId = call.getMessage().getChatId();
 
-        List<JSONObject> games = DataManager.findGameByExactId(gameId, DataManager.readDatabase());
+        List<JSONObject> games = FindExactGame.findGameByExactId(gameId, Database.readDatabase());
         if (!games.isEmpty()) {
             JSONObject game = games.get(0);
 

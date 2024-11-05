@@ -1,7 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
 import MainFunctions.Config;
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.FindExactGame;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -25,14 +26,14 @@ public class GameDetails {
 
         String identifier = callbackData.split("_", 2)[1].trim();
         System.out.println("Game identifier extracted: " + identifier);
-        Map<String, Object> database = DataManager.readDatabase();
+        Map<String, Object> database = Database.readDatabase();
 
         JSONObject gameData;
         if (wishlist) {
 
             JSONObject gameDataWishlist = search.searchGameByExactNameInWishlist(identifier, chatId);
             if (gameDataWishlist != null) {
-                List<JSONObject> gameInfoList = DataManager.findGameByExactName(identifier, database);
+                List<JSONObject> gameInfoList = FindExactGame.findGameByExactName(identifier, database);
                 gameData = gameInfoList.isEmpty() ? null : gameInfoList.get(0);
             }
             else {

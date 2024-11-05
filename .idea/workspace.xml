@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Config.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Handlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Download.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Download.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Import.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Import.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Language.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Language.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Removing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Removing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Searchs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Searchs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Sorting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Sorting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/TagCount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/TagCount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Wishlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Wishlist.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +54,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "itlord18__branch",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java/lib/jcommon-1.0.24.jar",
+    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -94,7 +100,9 @@
       <workItem from="1729902511584" duration="27000" />
       <workItem from="1729902553122" duration="1492000" />
       <workItem from="1730048524228" duration="7718000" />
-      <workItem from="1730213027954" duration="14826000" />
+      <workItem from="1730213027954" duration="16158000" />
+      <workItem from="1730713627859" duration="101000" />
+      <workItem from="1730818399884" duration="6800000" />
     </task>
     <servers />
   </component>

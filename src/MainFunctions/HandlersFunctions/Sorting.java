@@ -1,6 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.SortingFunctions;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class Sorting {
     private Handlers handler = new Handlers();
     private Message message = new Message();
+    private final WishlistFunctions Wishlist = new WishlistFunctions();
 
     public void handleSortCommand(long chatId) {
         SendMessage message = new SendMessage();
@@ -51,10 +54,10 @@ public class Sorting {
     }
 
     public void sortWishlistByDate(long chatId) {
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
-        Map<String, Object> database = DataManager.readDatabase();
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
+        Map<String, Object> database = Database.readDatabase();
 
-        List<JSONObject> sortedWishlist = DataManager.sortWishlistByDate(wishlist, database);
+        List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByDate(wishlist, database);
 
         if (sortedWishlist.isEmpty()) {
             message.sendMessage(chatId, "Your wishlist is empty.");
@@ -92,10 +95,10 @@ public class Sorting {
     }
 
     public void sortWishlistByReviews(long chatId) {
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
-        Map<String, Object> database = DataManager.readDatabase();
+            List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
+        Map<String, Object> database = Database.readDatabase();
 
-        List<JSONObject> sortedWishlist = DataManager.sortWishlistByReviews(wishlist, database);
+        List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByReviews(wishlist, database);
 
         if (sortedWishlist.isEmpty()) {
             message.sendMessage(chatId, "Your wishlist is empty.");
@@ -134,9 +137,9 @@ public class Sorting {
 
 
     public void sortWishlistByAlphabet(long chatId) {
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
 
-        List<JSONObject> sortedWishlist = DataManager.sortWishlistByAlphabet(wishlist);
+        List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByAlphabet(wishlist);
 
         if (sortedWishlist.isEmpty()) {
             message.sendMessage(chatId, "Your wishlist is empty.");

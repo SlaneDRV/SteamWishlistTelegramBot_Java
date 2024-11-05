@@ -1,6 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
@@ -8,7 +10,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -23,8 +24,10 @@ import java.util.stream.Collectors;
 public class TagCount {
 
     private Handlers handler = new Handlers();
+
+    private final WishlistFunctions Wishlist = new WishlistFunctions();
     public void handleTagCount(long chatId) {
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
         Map<String, Integer> tagCounter = new HashMap<>();
         Map<String, List<String>> tagToGames = new HashMap<>();
 
@@ -33,7 +36,7 @@ public class TagCount {
                 .collect(Collectors.toList());
 
         for (String gameId : gameIds) {
-            List<JSONObject> games = DataManager.findGameByExactId(gameId, DataManager.readDatabase());
+            List<JSONObject> games = FindExactGame.findGameByExactId(gameId, Database.readDatabase());
             if (!games.isEmpty()) {
                 JSONObject game = games.get(0);
                 JSONArray tags = game.optJSONArray("TopTags");

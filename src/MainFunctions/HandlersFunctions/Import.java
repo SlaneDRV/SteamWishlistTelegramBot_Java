@@ -1,7 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.MergeFile;
 import MainFunctions.Handlers;
+import MainFunctions.DataManageFunctions.ReadFile;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,8 +16,10 @@ import java.util.List;
 
 public class Import {
 
-    private Handlers handler = new Handlers();
-    private Message message = new Message();
+    private final Handlers handler = new Handlers();
+    private final Message message = new Message();
+
+    private final MergeFile mergeFile = new MergeFile();
 
     public void processImportFile(String fileId, String fileName, long chatId) {
         try {
@@ -31,21 +34,21 @@ public class Import {
             List<JSONObject> importedData;
             switch (fileExtension) {
                 case "txt":
-                    importedData = DataManager.readTxtFile(downloadedFile);
+                    importedData = ReadFile.readTxtFile(downloadedFile);
                     break;
                 case "yaml":
                 case "yml":
-                    importedData = DataManager.readYamlFile(downloadedFile);
+                    importedData = ReadFile.readYamlFile(downloadedFile);
                     break;
                 case "json":
-                    importedData = DataManager.readJsonFile(downloadedFile);
+                    importedData = ReadFile.readJsonFile(downloadedFile);
                     break;
                 default:
                     message.sendMessage(chatId, "Unsupported file format. Please upload a txt or yaml file.");
                     return;
             }
 
-            DataManager.mergeWishlists(chatId, importedData);
+            mergeFile.mergeWishlists(chatId, importedData);
             message.sendMessage(chatId, "Wishlist imported and updated successfully.");
 
         } catch (TelegramApiException | IOException e) {

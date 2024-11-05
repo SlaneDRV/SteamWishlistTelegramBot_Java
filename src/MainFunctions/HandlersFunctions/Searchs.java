@@ -1,6 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.FindGame;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Searchs {
-    private Handlers handler = new Handlers();
-    private Message message = new Message();
+    private final Handlers handler = new Handlers();
+    private final Message message = new Message();
+
+    private static final WishlistFunctions Wishlist = new WishlistFunctions();
 
     public void searchGameByTag(long chatId, String tag) {
 
@@ -22,7 +26,7 @@ public class Searchs {
         System.out.println("Searching for games by tag START");
 
 
-        List<Map.Entry<String, JSONObject>> games = DataManager.findGamesByTag(tag, DataManager.readDatabase());
+        List<Map.Entry<String, JSONObject>> games = FindGame.findGamesByTag(tag, Database.readDatabase());
 
         System.out.println("Searching for games by tag FINISH");
 
@@ -70,7 +74,7 @@ public class Searchs {
         message.sendMessage(chatId, "Searching for games with name '" + gameName + "'...");
         System.out.println("Searching for games by name START");
 
-        List<Map.Entry<String, JSONObject>> games = DataManager.findGamesByName(gameName, DataManager.readDatabase());
+        List<Map.Entry<String, JSONObject>> games = FindGame.findGamesByName(gameName, Database.readDatabase());
 
         System.out.println("Searching for games by name FINISH");
 
@@ -115,7 +119,7 @@ public class Searchs {
 
     public static JSONObject searchGameByExactNameInWishlist(String gameName, long userId) {
 
-        List<JSONObject> wishlist = DataManager.readWishlist(userId);
+        List<JSONObject> wishlist = Wishlist.readWishlist(userId);
         System.out.println("Wishlist: " + wishlist);
 
         for (JSONObject game : wishlist) {

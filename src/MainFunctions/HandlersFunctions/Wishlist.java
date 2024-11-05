@@ -1,6 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,9 +22,11 @@ public class Wishlist {
     private Handlers handler = new Handlers();
     private Message message = new Message();
 
+    private final WishlistFunctions Wishlist = new WishlistFunctions();
+
     public void showWishlist(long chatId) {
 
-        List<JSONObject> wishlist = DataManager.readWishlist(chatId);
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
 
         if (wishlist.isEmpty()) {
             message.sendMessage(chatId, "Your wishlist is empty.");
@@ -93,8 +97,8 @@ public class Wishlist {
         String gameName = call.getData().split("_", 2)[1];
         long chatId = call.getMessage().getChatId();
 
-        Map<String, Object> database = DataManager.readDatabase();
-        List<JSONObject> games = DataManager.findGameByExactName(gameName, database);
+        Map<String, Object> database = Database.readDatabase();
+        List<JSONObject> games = FindExactGame.findGameByExactName(gameName, database);
 
         if (!games.isEmpty()) {
             JSONObject gameData = games.get(0);
@@ -104,7 +108,7 @@ public class Wishlist {
             gameDataEnd.put("Name", gameData.optString("Name"));
             gameDataEnd.put("Price", gameData.optString("Price"));
 
-            DataManager.addGameToWishlist(chatId, gameDataEnd);
+            Wishlist.addGameToWishlist(chatId, gameDataEnd);
 
             String currentText = call.getMessage().getText();
             String newText = gameData.optString("Name") + " has been added to your wishlist.";

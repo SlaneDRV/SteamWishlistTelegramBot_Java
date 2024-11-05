@@ -1,6 +1,6 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManager;
+import MainFunctions.DataManageFunctions.GenerateFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Download {
     private Message message = new Message();
+
+    private GenerateFile file = new GenerateFile();
     public void chooseDownloadFormat(long chatId) {
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
         markup.setResizeKeyboard(true);
@@ -33,13 +35,13 @@ public class Download {
 
         switch (formatChoice) {
             case "txt":
-                filename = DataManager.generateWishlistFileTxt(chatId);
+                filename = file.generateWishlistFileTxt(chatId);
                 break;
             case "json":
-                filename = DataManager.generateWishlistFileJson(chatId);
+                filename = file.generateWishlistFileJson(chatId);
                 break;
             case "yaml":
-                filename = DataManager.generateWishlistFileYaml(chatId);
+                filename = file.generateWishlistFileYaml(chatId);
                 break;
             default:
                 message.sendMessage(chatId, "Unknown format. Please choose again.");
