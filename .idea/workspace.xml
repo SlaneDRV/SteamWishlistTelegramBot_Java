@@ -6,17 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Download.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Download.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/FindGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/FindGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/WishlistFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/WishlistFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Import.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Import.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Language.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Language.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Removing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Removing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Searchs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Searchs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Sorting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Sorting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/TagCount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/TagCount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Wishlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/Wishlist.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +42,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -61,9 +55,10 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/dzmitryrevutski/Desktop/JavaProject/SteamWishlistTelegramBot_Java/src/Main.java",
-    "project.structure.last.edited": "Libraries",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.40998685",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -102,7 +97,9 @@
       <workItem from="1730048524228" duration="7718000" />
       <workItem from="1730213027954" duration="16158000" />
       <workItem from="1730713627859" duration="101000" />
-      <workItem from="1730818399884" duration="6800000" />
+      <workItem from="1730818399884" duration="7478000" />
+      <workItem from="1731247260076" duration="4972000" />
+      <workItem from="1731422311567" duration="9137000" />
     </task>
     <servers />
   </component>

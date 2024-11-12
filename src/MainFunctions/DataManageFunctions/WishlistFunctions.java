@@ -50,11 +50,13 @@ public class WishlistFunctions {
         String filename = DataManager.getWishlistPath(userId);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             System.out.println("Save wishlist for user: " + userId);
-            writer.write(wishlist.toString());
+            JSONArray jsonArray = new JSONArray(wishlist);
+            writer.write(jsonArray.toString(2)); // Параметр 2 для отступов
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     public static List<JSONObject> addGameToWishlist(long userId, JSONObject game) {
         List<JSONObject> wishlist = readWishlist(userId);

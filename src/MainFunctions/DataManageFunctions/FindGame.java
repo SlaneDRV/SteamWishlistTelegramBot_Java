@@ -17,16 +17,12 @@ public class FindGame {
         }
 
         Map<String, JSONObject> results = new HashMap<>();
-
-        System.out.println("Total number of games in the database: " + database.size());
-        System.out.println("Is database empty? " + database.isEmpty());
+        String lowerCaseSearchTag = searchTag.toLowerCase();
 
         for (Map.Entry<String, Object> entry : database.entrySet()) {
             try {
                 String gameId = entry.getKey();
                 Object gameDataObj = entry.getValue();
-
-
 
                 if (!(gameDataObj instanceof Map)) {
                     System.out.println("Game data is not a valid Map for game ID: " + gameId);
@@ -45,14 +41,14 @@ public class FindGame {
                     JSONArray topTagsArray = gameData.optJSONArray("TopTags");
 
                     if (topTagsArray != null) {
-                        Set<String> tagsSet = new HashSet<>();
-
                         for (int i = 0; i < topTagsArray.length(); i++) {
-                            tagsSet.add(topTagsArray.optString(i).toLowerCase());
-                        }
+                            String tag = topTagsArray.optString(i).toLowerCase();
+                            double similarity = calculateLevenshteinSimilarity(lowerCaseSearchTag, tag);
 
-                        if (tagsSet.contains(searchTag.toLowerCase())) {
-                            results.put(gameId, gameData);
+                            if (similarity > 0.6) {
+                                results.put(gameId, gameData);
+                                break;
+                            }
                         }
                     } else {
                         System.out.println("TopTags is not a valid List for game ID: " + gameId);
@@ -68,7 +64,6 @@ public class FindGame {
         }
 
         List<Map.Entry<String, JSONObject>> sortedResults = new ArrayList<>(results.entrySet());
-
         sortedResults.sort((entry1, entry2) -> {
             int totalReviews1 = entry1.getValue().optInt("PositiveReviews", 0) + entry1.getValue().optInt("NegativeReviews", 0);
             int totalReviews2 = entry2.getValue().optInt("PositiveReviews", 0) + entry2.getValue().optInt("NegativeReviews", 0);
@@ -80,45 +75,6 @@ public class FindGame {
         return sortedResults.size() > 20 ? sortedResults.subList(0, 20) : sortedResults;
     }
 
-    public static List<Map.Entry<String, JSONObject>> findGamesByName(String gameName, Map<String, Object> database) {
-        System.out.println("Search games by name has been started.");
-        Map<String, JSONObject> results = new HashMap<>();
-        String searchQuery = gameName.toLowerCase().replace(" ", "");
-
-        for (Map.Entry<String, Object> entry : database.entrySet()) {
-            String gameId = entry.getKey();
-            Object gameDataObj = entry.getValue();
-
-
-            if (!(gameDataObj instanceof Map)) {
-                System.out.println("Invalid game data for game ID: " + gameId);
-                continue;
-            }
-
-            Map<String, Object> gameDataMap = (Map<String, Object>) gameDataObj;
-            JSONObject gameData = new JSONObject(gameDataMap);
-
-            String name = gameData.optString("Name").toLowerCase().replace(" ", "");
-
-
-            double ratio = calculateLevenshteinSimilarity(searchQuery, name);
-
-            if (ratio > 0.7 || name.contains(searchQuery)) {
-                int totalReviews = gameData.optInt("PositiveReviews", 0) + gameData.optInt("NegativeReviews", 0);
-                results.put(gameId, gameData);
-            }
-        }
-
-        List<Map.Entry<String, JSONObject>> sortedResults = new ArrayList<>(results.entrySet());
-        sortedResults.sort((x, y) -> {
-            int totalReviews1 = x.getValue().optInt("PositiveReviews", 0) + x.getValue().optInt("NegativeReviews", 0);
-            int totalReviews2 = y.getValue().optInt("PositiveReviews", 0) + y.getValue().optInt("NegativeReviews", 0);
-            return Integer.compare(totalReviews2, totalReviews1);
-        });
-
-        System.out.println("Search games by name is done.");
-        return sortedResults.stream().limit(10).collect(Collectors.toList());
-    }
 
     private static double calculateLevenshteinSimilarity(String s1, String s2) {
         int distance = levenshteinDistance(s1, s2);
@@ -145,5 +101,41 @@ public class FindGame {
         return dp[s1.length()][s2.length()];
     }
 
+    public static List<Map.Entry<String, JSONObject>> findGamesByName(String gameName, Map<String, Object> database) {
+        System.out.println("Search games by name has been started.");
+        Map<String, JSONObject> results = new HashMap<>();
+        String searchQuery = gameName.toLowerCase().replace(" ", "");
 
+        for (Map.Entry<String, Object> entry : database.entrySet()) {
+            String gameId = entry.getKey();
+            Object gameDataObj = entry.getValue();
+
+            if (!(gameDataObj instanceof Map)) {
+                System.out.println("Invalid game data for game ID: " + gameId);
+                continue;
+            }
+
+            Map<String, Object> gameDataMap = (Map<String, Object>) gameDataObj;
+            JSONObject gameData = new JSONObject(gameDataMap);
+
+            String name = gameData.optString("Name").toLowerCase().replace(" ", "");
+
+            double ratio = calculateLevenshteinSimilarity(searchQuery, name);
+
+            if (ratio > 0.6 || name.contains(searchQuery)) {
+                int totalReviews = gameData.optInt("PositiveReviews", 0) + gameData.optInt("NegativeReviews", 0);
+                results.put(gameId, gameData);
+            }
+        }
+
+        List<Map.Entry<String, JSONObject>> sortedResults = new ArrayList<>(results.entrySet());
+        sortedResults.sort((x, y) -> {
+            int totalReviews1 = x.getValue().optInt("PositiveReviews", 0) + x.getValue().optInt("NegativeReviews", 0);
+            int totalReviews2 = y.getValue().optInt("PositiveReviews", 0) + y.getValue().optInt("NegativeReviews", 0);
+            return Integer.compare(totalReviews2, totalReviews1);
+        });
+
+        System.out.println("Search games by name is done.");
+        return sortedResults.stream().limit(10).collect(Collectors.toList());
+    }
 }

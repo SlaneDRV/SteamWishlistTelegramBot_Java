@@ -3,6 +3,7 @@ package MainFunctions.HandlersFunctions;
 import MainFunctions.Config;
 import MainFunctions.DataManageFunctions.Database;
 import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -18,10 +19,11 @@ import java.util.stream.Collectors;
 
 public class GameDetails {
 
-    private Handlers handler = new Handlers();
-    private Searchs search = new Searchs();
-    private Message message = new Message();
-    public void showGameDetails(long chatId, String callbackData, boolean wishlist) {
+    private final Handlers handler = new Handlers();
+    private final Searchs search = new Searchs();
+    private final Message message = new Message();
+    private final WishlistFunctions wishlistFunc = new WishlistFunctions();
+    public void showGameDetails(long chatId, String callbackData, boolean isWishlist) {
         System.out.println("Processing game details callback...");
 
         String identifier = callbackData.split("_", 2)[1].trim();
@@ -29,23 +31,21 @@ public class GameDetails {
         Map<String, Object> database = Database.readDatabase();
 
         JSONObject gameData;
-        if (wishlist) {
-
+        if (isWishlist) {
             JSONObject gameDataWishlist = search.searchGameByExactNameInWishlist(identifier, chatId);
             if (gameDataWishlist != null) {
                 List<JSONObject> gameInfoList = FindExactGame.findGameByExactName(identifier, database);
                 gameData = gameInfoList.isEmpty() ? null : gameInfoList.get(0);
-            }
-            else {
+            } else {
                 gameData = null;
             }
-
         } else {
-
             gameData = new JSONObject((Map<String, Object>) database.get(identifier));
         }
 
         if (gameData != null) {
+            boolean isInWishlist = wishlistFunc.checkWishlist(chatId, gameData.optString("Name"));
+
             String imageUrl = gameData.optString("ImageURL", null);
             int totalReviews = gameData.optInt("PositiveReviews", 0) + gameData.optInt("NegativeReviews", 0);
             double positivePercentage = totalReviews > 0
@@ -92,7 +92,7 @@ public class GameDetails {
             List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
             InlineKeyboardButton wishlistButton = new InlineKeyboardButton();
-            if (wishlist) {
+            if (isInWishlist) {
                 wishlistButton.setText("Remove " + name + " from Wishlist");
                 wishlistButton.setCallbackData("remove_" + name);
             } else {
@@ -117,12 +117,13 @@ public class GameDetails {
 
             message.sendMessageWithInlineKeyboard(chatId, "Would you like to manage this game in your Wishlist?", inlineKeyboardMarkup);
         } else {
-            String errorMessage = wishlist
+            String errorMessage = isWishlist
                     ? "Game '" + identifier + "' not found in your Wishlist."
                     : "Information about game ID '" + identifier + "' not found in the database.";
             message.sendMessage(chatId, errorMessage);
         }
     }
+
 
     private String escapeHtml(String text) {
         return text.replace("&", "&amp;")

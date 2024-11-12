@@ -38,7 +38,24 @@ public class Wishlist {
 
         for (JSONObject game : wishlist) {
             String gameName = game.optString("Name");
-            String price = game.optDouble("Price", 0.0) != 0.0 ? game.optString("Price") : "Free";
+            String priceStr = game.optString("Price", "Free");
+
+            String price;
+            if (priceStr.equalsIgnoreCase("N/A")) {
+                price = "N/A";
+            } else {
+                try {
+                    if (!priceStr.equals("Free")) {
+                        price = priceStr.replace("$", "").trim();
+                        double priceValue = Double.parseDouble(price);
+                        price = "$" + price;
+                    } else {
+                        price = "Free";
+                    }
+                } catch (NumberFormatException e) {
+                    price = "Invalid Price";
+                }
+            }
 
             InlineKeyboardButton button = new InlineKeyboardButton();
             button.setText(gameName + " - " + price);
@@ -48,6 +65,8 @@ public class Wishlist {
             rowInline.add(button);
             rowsInline.add(rowInline);
         }
+
+
 
         inlineKeyboardMarkup.setKeyboard(rowsInline);
 

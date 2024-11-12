@@ -32,6 +32,7 @@ public class Handlers extends TelegramLongPollingBot {
         Searchs search = new Searchs();
         Removing remove = new Removing();
         Message message = new Message();
+        PriceHandler priceHandler = new PriceHandler();
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
@@ -79,9 +80,10 @@ public class Handlers extends TelegramLongPollingBot {
             else if(messageText.equals("Sort by alphabet")){
                 sort.sortWishlistByAlphabet(chatId);
             } else if(messageText.equals("Count Tags")){
-
                 tagCounter.handleTagCount(chatId);
-
+            }
+            else if (messageText.equals("Calculate Total Price")) {
+                priceHandler.handleTotalPrice(chatId,update);
             }
         } else if (update.hasMessage() && update.getMessage().hasDocument()) {
 
@@ -107,6 +109,8 @@ public class Handlers extends TelegramLongPollingBot {
                 remove.removeGameFromWishlistCallback(update.getCallbackQuery());
             } else if (callbackData.startsWith("languages_")) {
                 language.showAvailableLanguages(update.getCallbackQuery());
+            } else if (callbackData.startsWith("price_")) {
+                priceHandler.handlePriceRegion(chatId, update.getCallbackQuery());
             }
         }
     }
