@@ -15,7 +15,7 @@ public class Database {
         return CompletableFuture.runAsync(() -> {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                DataManager.DATABASE = objectMapper.readValue(new File(DataManager.getDetailedGamesPath()), HashMap.class);
+                DataManager.DATABASE = objectMapper.readValue(new File(DataManager.getGamesPath()), HashMap.class);
                 System.out.println("Database preloaded successfully.");
             } catch (IOException e) {
                 System.out.println("JSON database file not found or error decoding JSON data: " + e.getMessage());
