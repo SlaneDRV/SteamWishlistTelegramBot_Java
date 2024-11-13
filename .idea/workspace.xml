@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/GameInfoUpdater.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamGameProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SteamGameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SteamGameProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +111,7 @@
       <workItem from="1731247260076" duration="4972000" />
       <workItem from="1731422311567" duration="9137000" />
       <workItem from="1731456387277" duration="15124000" />
-      <workItem from="1731509270552" duration="938000" />
+      <workItem from="1731509270552" duration="1341000" />
     </task>
     <servers />
   </component>

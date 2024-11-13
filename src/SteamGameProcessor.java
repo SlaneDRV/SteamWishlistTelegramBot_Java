@@ -20,9 +20,9 @@ import java.util.stream.StreamSupport;
 
 public class SteamGameProcessor {
 
-    private static final String EXISTING_GAMES_FILE = "existing_games.json";
-    private static final String NEW_GAMES_FILE = "new_games.json";
-    private static final String INVALID_GAMES_FILE = "invalid_games.json";
+    private static final String EXISTING_GAMES_FILE = "Data/JSON/Games/existing_games.json";
+    private static final String NEW_GAMES_FILE = "Data/JSON/Games/new_games.json";
+    private static final String INVALID_GAMES_FILE = "Data/JSON/Games/invalid_games.json";
     private static final String API_KEY = Config.STEAM_KEY; // Замените на ваш API-ключ Steam
 
     // Создание HttpClient с установленной спецификацией куки
