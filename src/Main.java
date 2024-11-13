@@ -8,6 +8,8 @@
  *
  * @author Anton Sasnouski
  */
+import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.Handlers;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -20,7 +22,7 @@ public class Main {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             botsApi.registerBot(bot);
-            DataManager.preloadDatabase().thenRun(() -> {
+            Database.preloadDatabase().thenRun(() -> {
                 try {
                     botsApi.registerBot(bot);
                     System.out.println("Bot successfully started!");
