@@ -5,6 +5,8 @@ import MainFunctions.DataManageFunctions.Database;
 import MainFunctions.DataManageFunctions.FindExactGame;
 import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
+import SteamAPI.GameDataManager;
+import SteamAPI.GameProcessor;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -12,10 +14,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static MainFunctions.DataManager.GAMES_FILE;
 
 public class GameDetails {
 
@@ -144,4 +149,42 @@ public class GameDetails {
             e.printStackTrace();
         }
     }
+
+    private void updateGameInfo(long chatId, int appId) {
+        System.out.println("Updating game info for ID: " + appId);
+
+        Map<String, Object> database = Database.readDatabase();
+        JSONObject gameData = new JSONObject((Map<String, Object>) database.get(String.valueOf(appId)));
+
+        // Check if the game was updated today
+        String collectedDate = gameData.optString("CollectedDate", "");
+        String todayDate = LocalDate.now().toString();
+        if (collectedDate.equals(todayDate)) {
+            message.sendMessage(chatId, "The game information is already up-to-date.");
+            return;
+        }
+
+        // Fetch and update game information
+        GameProcessor gameProcessor = new GameProcessor();
+        try {
+            Map<String, Object> updatedGameInfo = gameProcessor.processGame(appId);
+
+            if (updatedGameInfo != null) {
+                GameDataManager.saveOrUpdateGameInfo(updatedGameInfo, GAMES_FILE); // Ensure this saves to the database
+                message.sendMessage(chatId, "Game information has been successfully updated.");
+            } else {
+                message.sendMessage(chatId, "Failed to update game information.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            message.sendMessage(chatId, "An error occurred while updating game information.");
+        } finally {
+            try {
+                gameProcessor.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 }

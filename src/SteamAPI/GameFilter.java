@@ -1,3 +1,5 @@
+package SteamAPI;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -8,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class GameFilter {
 
-    private static final String GAMES_FILE = "new_games.json"; // Путь к файлу с данными об играх
+    private static final String GAMES_FILE = "Data/JSON/Games/existing_games_actual.json"; // Путь к файлу с данными об играх
 
     public static void main(String[] args) {
         List<Map<String, Object>> filteredGames = getGamesWithReviewsOverThreshold(1000);

@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/SteamGameProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SteamGameProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameDataManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameInfoUpdater.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamApiClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamGamesProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamSpyClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SteamAPI/GameFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameInfoUpdater.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SteamGameProcessor.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,31 +45,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GameFilter.executor&quot;: &quot;Run&quot;,
-    &quot;Application.GameInfoUpdater.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SteamGameProcessor.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;P:/Projects/SteamWishlistTelegramBot_Java/lib/telegrambots-6.5.0-jar-with-dependencies.jar&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/dzmitryrevutski/Desktop/JavaProject/SteamWishlistTelegramBot_Java/src/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.40998685&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.importing&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.CollectedDate.executor": "Run",
+    "Application.GameFilter.executor": "Run",
+    "Application.GameInfoUpdater.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.SteamGameProcessor.executor": "Run",
+    "Application.Test.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "P:/Projects/SteamWishlistTelegramBot_Java/lib/telegrambots-6.5.0-jar-with-dependencies.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/Users/dzmitryrevutski/Desktop/JavaProject/SteamWishlistTelegramBot_Java/src/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.40998685",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
@@ -111,11 +124,40 @@
       <workItem from="1731247260076" duration="4972000" />
       <workItem from="1731422311567" duration="9137000" />
       <workItem from="1731456387277" duration="15124000" />
-      <workItem from="1731509270552" duration="1341000" />
+      <workItem from="1731509270552" duration="5297000" />
+      <workItem from="1731751199089" duration="577000" />
+      <workItem from="1731751812848" duration="9537000" />
+      <workItem from="1731788752644" duration="1816000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/SteamAPI/GameFilter.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/SteamAPI/GameFilter.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/SteamAPI/GameFilter.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/SteamAPI/GameFilter.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

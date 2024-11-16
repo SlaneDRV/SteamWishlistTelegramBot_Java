@@ -10,7 +10,7 @@ public class DataManager {
     private static final String DATA = "Data";
     private static final String JSON = "JSON";
     private static final String GAMES = "Games";
-    private static final String GAMES_FILE = "detailed_games_transformed.json";
+    public static final String GAMES_FILE = "existing_games_transformed.json";
 
     public static Map<String, Object> DATABASE;
 
