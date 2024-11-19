@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameDataManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameInfoUpdater.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/GameProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamApiClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamGamesProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SteamAPI/SteamSpyClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SteamAPI/GameFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameInfoUpdater.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SteamGameProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/PriceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/PriceHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +53,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "P:/Projects/SteamWishlistTelegramBot_Java/lib/telegrambots-6.5.0-jar-with-dependencies.jar",
+    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java/Data/JSON/Games",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -74,9 +69,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\TgBot\SteamApi\JSON" />
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
       <recent name="P:\Projects\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
       <recent name="P:\Projects\SteamWishlistTelegramBot_Java\Data\JSON" />
       <recent name="P:\Projects\SteamWishlistTelegramBot_Java\lib" />

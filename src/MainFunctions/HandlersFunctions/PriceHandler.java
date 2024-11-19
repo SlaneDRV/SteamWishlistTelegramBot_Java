@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 public class PriceHandler {
 
-    public void handleTotalPrice(long chatId, Update update) {
+    public void handleTotalPrice(long chatId) {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();

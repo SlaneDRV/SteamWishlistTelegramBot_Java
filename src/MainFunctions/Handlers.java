@@ -83,7 +83,7 @@ public class Handlers extends TelegramLongPollingBot {
                 tagCounter.handleTagCount(chatId);
             }
             else if (messageText.equals("Calculate Total Price")) {
-                priceHandler.handleTotalPrice(chatId,update);
+                priceHandler.handleTotalPrice(chatId);
             }
         } else if (update.hasMessage() && update.getMessage().hasDocument()) {
 
@@ -111,6 +111,10 @@ public class Handlers extends TelegramLongPollingBot {
                 language.showAvailableLanguages(update.getCallbackQuery());
             } else if (callbackData.startsWith("price_")) {
                 priceHandler.handlePriceRegion(chatId, update.getCallbackQuery());
+            }
+            else if (callbackData.startsWith("update_")) {
+                int appId = Integer.parseInt(callbackData.split("_")[1]);
+                game.updateGameInfo(chatId, appId);
             }
         }
     }

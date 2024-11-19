@@ -70,6 +70,7 @@ public class GameDetails {
             String name = escapeHtml(gameData.optString("Name"));
             String shortDescription = escapeHtml(gameData.optString("ShortDesc"));
             String releaseDate = escapeHtml(gameData.optString("ReleaseDate"));
+            String lastUpdate = escapeHtml(gameData.optString("CollectedDate"));
 
             String caption = String.format(
                     "<b>%s</b>\n\n"
@@ -82,9 +83,10 @@ public class GameDetails {
                             + "<b>Price:</b> %s\n"
                             + "<b>Max Online Yesterday:</b> %s\n"
                             + "<b>Platforms:</b> %s\n"
+                            + "<b>Last updated:</b> %s\n"
                             + "%s",
                     name, shortDescription, totalReviews, positivePercentage, releaseDate, developer, publisher,
-                    tags, price, dayPeak, platforms, href
+                    tags, price, dayPeak, platforms, lastUpdate, href
             );
 
             if (imageUrl != null) {
@@ -111,7 +113,7 @@ public class GameDetails {
             languagesButton.setCallbackData("languages_" + gameData.optString("ID"));
             rowsInline.add(List.of(languagesButton));
 
-            if (chatId == Config.TG_ID) {
+            if (chatId == Config.TG_ID1 || chatId == Config.TG_ID2 || chatId == Config.TG_ID3) {
                 InlineKeyboardButton updateButton = new InlineKeyboardButton();
                 updateButton.setText("Update game info");
                 updateButton.setCallbackData("update_" + gameData.optString("ID"));
@@ -150,7 +152,7 @@ public class GameDetails {
         }
     }
 
-    private void updateGameInfo(long chatId, int appId) {
+    public void updateGameInfo(long chatId, int appId) {
         System.out.println("Updating game info for ID: " + appId);
 
         Map<String, Object> database = Database.readDatabase();
