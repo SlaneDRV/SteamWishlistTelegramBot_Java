@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static MainFunctions.DataManager.GAMES_FILE;
+import static SteamAPI.GameInfoUpdater.EXISTING_GAMES_FILE;
 
 public class GameDetails {
 
@@ -172,7 +173,7 @@ public class GameDetails {
             Map<String, Object> updatedGameInfo = gameProcessor.processGame(appId);
 
             if (updatedGameInfo != null) {
-                GameDataManager.saveOrUpdateGameInfo(updatedGameInfo, GAMES_FILE); // Ensure this saves to the database
+                GameDataManager.saveOrUpdateGameInfo(updatedGameInfo, EXISTING_GAMES_FILE); // Ensure this saves to the database
                 message.sendMessage(chatId, "Game information has been successfully updated.");
             } else {
                 message.sendMessage(chatId, "Failed to update game information.");

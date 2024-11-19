@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class GameInfoUpdater {
 
-    private static final String EXISTING_GAMES_FILE = "Data/JSON/Games/existing_games_actual.json";
+    public static final String EXISTING_GAMES_FILE = "Data/JSON/Games/existing_games_actual.json";
     private static final String INVALID_GAMES_FILE = "Data/JSON/Games/invalid_games.json";
 
     public static void main(String[] args) {
