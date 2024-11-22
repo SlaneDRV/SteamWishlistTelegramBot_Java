@@ -10,11 +10,11 @@ public class GameInfoUpdater {
 
     public static void main(String[] args) {
         try {
-            int appid = 1086940;
+            int appid = 3061810;
             GameProcessor gameProcessor = new GameProcessor();
             GameDataManager dataManager = new GameDataManager();
 
-            Map<String, Object> gameInfo = gameProcessor.processGame(1086940);
+            Map<String, Object> gameInfo = gameProcessor.processGame(appid);
 
             if (gameInfo != null) {
                 System.out.println("Информация об игре:");

@@ -1,117 +1,132 @@
 package MainFunctions.HandlersFunctions;
 
 import MainFunctions.DataManageFunctions.*;
+import SteamAPI.GameProcessor;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.text.SimpleDateFormat;
 
 public class PriceHandler {
 
-    public void handleTotalPrice(long chatId) {
+    private static final Map<String, Double> exchangeRates = Map.of(
+            "ru", 0.013,  // Russian Ruble to USD
+            "ua", 0.027,  // Ukrainian Hryvnia to USD
+            "tr", 0.036,  // Turkish Lira to USD
+            "kz", 0.0022, // Kazakhstani Tenge to USD
+            "pl", 0.23,   // Polish Zloty to USD
+            "cn", 0.14    // Chinese Yuan to USD
+    );
 
+    public static double getExchangeRate(String regionCode) {
+        return exchangeRates.getOrDefault(regionCode, 1.0); // Default to 1.0 if regionCode not found
+    }
+
+    public void handleTotalPrice(long chatId) {
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
 
-        InlineKeyboardButton buttonRu = new InlineKeyboardButton();
-        buttonRu.setText("🇷🇺");
-        buttonRu.setCallbackData("price_ru");
-
-        InlineKeyboardButton buttonUa = new InlineKeyboardButton();
-        buttonUa.setText("🇺🇦");
-        buttonUa.setCallbackData("price_ua");
-
-        InlineKeyboardButton buttonTr = new InlineKeyboardButton();
-        buttonTr.setText("🇹🇷");
-        buttonTr.setCallbackData("price_tr");
-
-        InlineKeyboardButton buttonKz = new InlineKeyboardButton();
-        buttonKz.setText("🇰🇿");
-        buttonKz.setCallbackData("price_kz");
-
-        InlineKeyboardButton buttonPl = new InlineKeyboardButton();
-        buttonPl.setText("🇵🇱");
-        buttonPl.setCallbackData("price_pl");
-
-        InlineKeyboardButton buttonCn = new InlineKeyboardButton();
-        buttonCn.setText("🇨🇳");
-        buttonCn.setCallbackData("price_cn");
-
-        // Добавляем кнопки в строку
-        rowsInline.add(List.of(buttonRu, buttonUa, buttonTr, buttonKz, buttonPl, buttonCn));
-
+        // Add buttons for each region
+        rowsInline.add(createRegionButtons());
         markup.setKeyboard(rowsInline);
 
         Message message = new Message();
-
-        message.sendMessageWithInlineKeyboard(chatId, "Select region:", markup);
+        message.sendMessageWithInlineKeyboard(chatId, "Select a region to calculate total price:", markup);
     }
 
-    private static final Map<String, Double> exchangeRates = new HashMap<>();
-    static {
-        exchangeRates.put("RUB", 0.013);
-        exchangeRates.put("UAH", 0.027);
-        exchangeRates.put("TRY", 0.060);
-        exchangeRates.put("KZT", 0.0023);
-        exchangeRates.put("PLN", 0.24);
-        exchangeRates.put("CNY", 0.14);
-        exchangeRates.put("USD", 1.0);
+    private List<InlineKeyboardButton> createRegionButtons() {
+        List<InlineKeyboardButton> regionButtons = new ArrayList<>();
+        Map<String, String> regions = Map.of(
+                "ru", "🇷🇺",
+                "ua", "🇺🇦",
+                "tr", "🇹🇷",
+                "kz", "🇰🇿",
+                "pl", "🇵🇱",
+                "cn", "🇨🇳"
+        );
+
+        for (Map.Entry<String, String> region : regions.entrySet()) {
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(region.getValue());
+            button.setCallbackData("price_" + region.getKey());
+            regionButtons.add(button);
+        }
+        return regionButtons;
     }
 
-    public void handlePriceRegion(long userId,CallbackQuery callbackQuery) {
+    public void handlePriceRegion(long chatId, CallbackQuery callbackQuery) {
         String regionCode = callbackQuery.getData().split("_")[1];
-        List<JSONObject> wishlist = WishlistFunctions.readWishlist(userId);
+        List<JSONObject> wishlist = WishlistFunctions.readWishlist(chatId);
 
-        List<JSONObject> gameInfo = new ArrayList<>();
-        for (JSONObject game : wishlist) {
-            String gameId = game.optString("ID");
-            List<JSONObject> games = FindExactGame.findGameByExactId(gameId, Database.readDatabase());
-            if (!games.isEmpty()) {
-                gameInfo.add(games.get(0));
-            }
+        if (wishlist.isEmpty()) {
+            sendMessage(chatId, "Your wishlist is empty.");
+            return;
         }
 
-        double totalPrice = 0.0;
-        String currency = "USD";
-        List<String> availableGames = new ArrayList<>();
-        List<String> unavailableGames = new ArrayList<>();
+        // Prepare price calculations
         List<String> freeGames = new ArrayList<>();
-        List<String> upcomingGames = new ArrayList<>();
+        List<String> priceNotAnnouncedGames = new ArrayList<>();
+        List<String> unavailableGames = new ArrayList<>();
+        List<String> availableGames = new ArrayList<>();
 
-        for (JSONObject game : gameInfo) {
-            String gameName = game.optString("Name");
-            String gamePriceStr = game.optString("Price");
-            double gamePrice = parsePrice(gamePriceStr);
+        double totalUSPrice = 0.0;
+        double totalRegionPrice = 0.0;
 
-            if (gamePrice == 0.0) {
-                freeGames.add(gameName);
-                continue;
+        GameProcessor gameProcessor = new GameProcessor();
+        try {
+            for (JSONObject game : wishlist) {
+                String gameName = game.optString("Name", "Unknown");
+                int appId = game.optInt("ID", -1);
+                String gamePrice = game.optString("Price", "").toLowerCase();
+
+                if (appId == -1) continue;
+
+                try {
+                    // Fetch prices
+                    String usPriceStr = gameProcessor.getGamePriceByRegion(appId, "US");
+                    String regionPriceStr = gameProcessor.getGamePriceByRegion(appId, regionCode);
+
+                    double usPrice = parsePrice(usPriceStr);
+                    double regionPrice = parsePrice(regionPriceStr);
+
+                    // Check for "Price Not Announced"
+                    if (gamePrice.equals("coming soon")) {
+                        priceNotAnnouncedGames.add(gameName);
+                    } else if (usPrice == 0.0) {
+                        // Free games
+                        freeGames.add(gameName);
+                    } else if (regionPrice == 0.0) {
+                        // Unavailable games
+                        unavailableGames.add(gameName);
+                    } else {
+                        // Available games
+                        availableGames.add(gameName);
+                        totalUSPrice += usPrice;
+                        totalRegionPrice += convertToRegionPrice(regionPrice, regionCode);
+                    }
+
+                } catch (Exception e) {
+                    unavailableGames.add(gameName); // Treat as unavailable in case of failure
+                }
             }
-
-            if (isUpcomingGame(game.optString("ReleaseDate"))) {
-                upcomingGames.add(gameName);
-                continue;
+        } finally {
+            try {
+                gameProcessor.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            double regionalPrice = convertToRegionPrice(gamePrice, regionCode);
-            totalPrice += regionalPrice;
-            availableGames.add(gameName);
         }
 
-        String regionName = getRegionName(regionCode);
-        String currencySymbol = getCurrencySymbol(currency);
+        // Build the response message
+        String response = generateResponse(
+                regionCode, totalUSPrice, totalRegionPrice,
+                freeGames, priceNotAnnouncedGames, unavailableGames, availableGames
+        );
 
-        String response = generateResponse(regionName, totalPrice, currencySymbol, availableGames, unavailableGames, freeGames, upcomingGames);
-
-        System.out.println(response);
+        sendMessage(chatId, response);
     }
 
 
@@ -125,77 +140,79 @@ public class PriceHandler {
     }
 
     private double convertToRegionPrice(double price, String regionCode) {
-        Double exchangeRate = exchangeRates.get(regionCode.toUpperCase());
-        if (exchangeRate != null) {
-            return price * exchangeRate;
+        // For Turkey, prices are already in USD, so return directly
+        if (regionCode.equals("tr")) {
+            return price;
         }
-        return price;
+        double exchangeRate = getExchangeRate(regionCode);
+        return price * exchangeRate;
     }
 
-    private boolean isUpcomingGame(String releaseDateStr) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
-            Date releaseDate = sdf.parse(releaseDateStr);
-            return releaseDate.after(new Date());
-        } catch (Exception e) {
-            return false;
-        }
+
+    private String generateResponse(
+            String regionCode, double totalUSPrice, double totalRegionPrice,
+            List<String> freeGames, List<String> priceNotAnnouncedGames,
+            List<String> unavailableGames, List<String> availableGames) {
+
+        String regionName = getRegionName(regionCode);
+        String currencySymbol = getCurrencySymbol(regionCode);
+
+        // Если регион — Турция (или другой с долларами), цена остаётся как есть
+        double localRegionPrice = regionCode.equals("tr")
+                ? totalRegionPrice
+                : totalRegionPrice / getExchangeRate(regionCode);
+
+        // Формируем строку для цены с учётом региональной валюты
+        String localCurrencyDisplay = regionCode.equals("tr")
+                ? String.format("$%.2f", totalRegionPrice) // Турция отображает только в долларах
+                : String.format("%.0f %s ($%.2f)", localRegionPrice, currencySymbol, totalRegionPrice);
+
+        return String.format(
+                "Wishlist Price Summary:\n\n" +
+                        "Region: %s\n" +
+                        "Total US Price: $%.2f\n" +
+                        "Total %s Price: %s\n\n" +
+                        "Available Games:\n%s\n\n" +
+                        "Free Games:\n%s\n\n" +
+                        "Price Not Announced:\n%s\n\n" +
+                        "Unavailable Games:\n%s\n",
+                regionName, totalUSPrice, regionName, localCurrencyDisplay,
+                availableGames.isEmpty() ? "No available games." : String.join("\n", availableGames),
+                freeGames.isEmpty() ? "No free games." : String.join("\n", freeGames),
+                priceNotAnnouncedGames.isEmpty() ? "No games with unannounced prices." : String.join("\n", priceNotAnnouncedGames),
+                unavailableGames.isEmpty() ? "No unavailable games." : String.join("\n", unavailableGames)
+        );
     }
+
+
+
 
     private String getRegionName(String regionCode) {
-        switch (regionCode) {
-            case "ru":
-                return "Russia";
-            case "ua":
-                return "Ukraine";
-            case "tr":
-                return "Turkey";
-            case "kz":
-                return "Kazakhstan";
-            case "pl":
-                return "Poland";
-            case "cn":
-                return "China";
-            default:
-                return "Unknown region";
-        }
-    }
-
-    private String getCurrencySymbol(String currency) {
-        switch (currency) {
-            case "RUB":
-                return "₽";
-            case "UAH":
-                return "₴";
-            case "TRY":
-                return "₺";
-            case "KZT":
-                return "₸";
-            case "PLN":
-                return "zł";
-            case "CNY":
-                return "¥";
-            default:
-                return "$";
-        }
-    }
-
-    private String generateResponse(String regionName, double totalPrice, String currencySymbol,
-                                    List<String> availableGames, List<String> unavailableGames,
-                                    List<String> freeGames, List<String> upcomingGames) {
-        return String.format(
-                "Total price of wishlist games available in %s: %s%.2f\n\n" +
-                        "Available games:\n%s\n" +
-                        "Free games:\n%s\n" +
-                        "Upcoming games:\n%s\n" +
-                        "Unavailable games:\n%s\n",
-                regionName,
-                currencySymbol,
-                totalPrice,
-                availableGames.isEmpty() ? "All games are available." : String.join("\n", availableGames),
-                freeGames.isEmpty() ? "No free games." : String.join("\n", freeGames),
-                upcomingGames.isEmpty() ? "No upcoming games." : String.join("\n", upcomingGames),
-                unavailableGames.isEmpty() ? "All games are available." : String.join("\n", unavailableGames)
+        Map<String, String> regions = Map.of(
+                "ru", "Russia",
+                "ua", "Ukraine",
+                "tr", "Turkey",
+                "kz", "Kazakhstan",
+                "pl", "Poland",
+                "cn", "China"
         );
+        return regions.getOrDefault(regionCode, "Unknown Region");
+    }
+
+    private String getCurrencySymbol(String regionCode) {
+        Map<String, String> symbols = Map.of(
+                "ru", "₽",
+                "ua", "₴",
+                "tr", "₺",
+                "kz", "₸",
+                "pl", "zł",
+                "cn", "¥"
+        );
+        return symbols.getOrDefault(regionCode, "$");
+    }
+
+    private void sendMessage(long chatId, String text) {
+        Message message = new Message();
+        message.sendMessage(chatId, text);
     }
 }

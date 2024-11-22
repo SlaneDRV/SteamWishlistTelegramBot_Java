@@ -49,11 +49,13 @@ public class Wishlist {
                         price = priceStr.replace("$", "").trim();
                         double priceValue = Double.parseDouble(price);
                         price = "$" + price;
+                    } else if (priceStr.equals("Coming Soon")) {
+                        price = "Coming Soon";
                     } else {
                         price = "Free";
                     }
                 } catch (NumberFormatException e) {
-                    price = "Invalid Price";
+                    price = "N/A";
                 }
             }
 
