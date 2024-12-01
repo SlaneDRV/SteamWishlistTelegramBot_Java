@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,14 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="JavaAutoRunManager">
-    <enabled-run-configurations>
-      <run-configuration type="JUnit" name="FindExactGameTest" />
-    </enabled-run-configurations>
-  </component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "isMigrated": true
-}]]></component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -68,7 +62,7 @@
     "git-widget-placeholder": "main",
     "jdk.selected.JAVA_MODULE": "openjdk-23",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java/lib/junit-platform-commons-1.10.0-javadoc.jar",
+    "last_opened_file_path": "P:/Projects/SteamWishlistTelegramBot_Java/lib/telegrambots-6.5.0-jar-with-dependencies.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -84,6 +78,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="P:\Projects\SteamWishlistTelegramBot_Java\lib" />
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
     </key>
@@ -120,6 +115,14 @@
       </method>
     </configuration>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.227" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.227" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -144,6 +147,7 @@
       <workItem from="1731751812848" duration="9537000" />
       <workItem from="1731788752644" duration="1816000" />
       <workItem from="1733076178205" duration="5839000" />
+      <workItem from="1733084358306" duration="972000" />
     </task>
     <servers />
   </component>
