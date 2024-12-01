@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static MainFunctions.DataManager.GAMES_FILE;
 import static SteamAPI.GameInfoUpdater.EXISTING_GAMES_FILE;
 
 public class GameDetails {

@@ -6,12 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7a2a0c0b-0cd8-4b29-9674-19109e40f0cb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SteamWishlistTelegramBot_Java.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManageFunctions/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/DataManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/Handlers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/GameDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/PriceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainFunctions/HandlersFunctions/PriceHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +25,19 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="JavaAutoRunManager">
+    <enabled-run-configurations>
+      <run-configuration type="JUnit" name="FindExactGameTest" />
+    </enabled-run-configurations>
+  </component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -45,15 +53,22 @@
     "Application.CollectedDate.executor": "Run",
     "Application.GameFilter.executor": "Run",
     "Application.GameInfoUpdater.executor": "Run",
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "Application.SteamGameProcessor.executor": "Run",
     "Application.Test.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.FindExactGameTest.executor": "Run",
+    "JUnit.Unnamed.executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
+    "jdk.selected.JAVA_MODULE": "openjdk-23",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java/Data/JSON/Games",
+    "last_opened_file_path": "D:/7sem/Java/SteamWishlistTelegramBot_Java/lib/junit-platform-commons-1.10.0-javadoc.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -61,7 +76,7 @@
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "/Users/dzmitryrevutski/Desktop/JavaProject/SteamWishlistTelegramBot_Java/src/Main.java",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
+    "project.structure.proportion": "0.15332031",
     "project.structure.side.proportion": "0.40998685",
     "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
     "vue.rearranger.settings.migration": "true"
@@ -69,18 +84,28 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\TgBot\SteamApi\JSON" />
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\src" />
       <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\lib" />
+      <recent name="D:\7sem\Java\SteamWishlistTelegramBot_Java\TgBot\SteamApi\JSON" />
       <recent name="P:\Projects\SteamWishlistTelegramBot_Java\Data\JSON\Games" />
       <recent name="P:\Projects\SteamWishlistTelegramBot_Java\Data\JSON" />
-      <recent name="P:\Projects\SteamWishlistTelegramBot_Java\lib" />
     </key>
   </component>
   <component name="RunManager">
+    <configuration name="Unnamed" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="SteamWishlistTelegramBot_Java" />
+      <option name="PACKAGE_NAME" value="Tests.DataManager" />
+      <option name="MAIN_CLASS_NAME" value="Tests.DataManager.FindExactGameTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="steamwishlist_telegrambot_java" />
       <method v="2">
@@ -94,14 +119,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.227" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.227" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -126,6 +143,7 @@
       <workItem from="1731751199089" duration="577000" />
       <workItem from="1731751812848" duration="9537000" />
       <workItem from="1731788752644" duration="1816000" />
+      <workItem from="1733076178205" duration="5839000" />
     </task>
     <servers />
   </component>
@@ -155,6 +173,10 @@
           <line>59</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.NoClassDefFoundError" package="java.lang" />
+          <option name="timeStamp" value="6" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
