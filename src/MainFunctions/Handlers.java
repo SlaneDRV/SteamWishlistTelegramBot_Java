@@ -113,8 +113,11 @@ public class Handlers extends TelegramLongPollingBot {
                 priceHandler.handlePriceRegion(chatId, update.getCallbackQuery());
             }
             else if (callbackData.startsWith("update_")) {
+
                 int appId = Integer.parseInt(callbackData.split("_")[1]);
-                game.updateGameInfo(chatId, appId);
+                System.out.println("callBackData: " + callbackData);
+                boolean isWishlist = Boolean.parseBoolean(callbackData.split("_")[2]);
+                game.updateGameInfo(chatId, appId, isWishlist);
             }
         }
     }

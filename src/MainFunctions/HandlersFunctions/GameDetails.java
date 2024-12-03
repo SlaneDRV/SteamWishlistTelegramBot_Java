@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static SteamAPI.GameInfoUpdater.EXISTING_GAMES_FILE;
@@ -27,6 +28,7 @@ public class GameDetails {
     private final Handlers handler = new Handlers();
     private final Searchs search = new Searchs();
     private final Message message = new Message();
+    private final Database dataManager = new Database();
     private final WishlistFunctions wishlistFunc = new WishlistFunctions();
     public void showGameDetails(long chatId, String callbackData, boolean isWishlist) {
         System.out.println("Processing game details callback...");
@@ -116,7 +118,7 @@ public class GameDetails {
             if (chatId == Config.TG_ID1 || chatId == Config.TG_ID2 || chatId == Config.TG_ID3) {
                 InlineKeyboardButton updateButton = new InlineKeyboardButton();
                 updateButton.setText("Update game info");
-                updateButton.setCallbackData("update_" + gameData.optString("ID"));
+                updateButton.setCallbackData("update_" + gameData.optString("ID") + "_" + isWishlist);
                 rowsInline.add(List.of(updateButton));
             }
 
@@ -152,7 +154,7 @@ public class GameDetails {
         }
     }
 
-    public void updateGameInfo(long chatId, int appId) {
+    public void updateGameInfo(long chatId, int appId, boolean isWishlist) {
         System.out.println("Updating game info for ID: " + appId);
 
         Map<String, Object> database = Database.readDatabase();
@@ -172,8 +174,11 @@ public class GameDetails {
             Map<String, Object> updatedGameInfo = gameProcessor.processGame(appId);
 
             if (updatedGameInfo != null) {
+                String gameName = updatedGameInfo.getOrDefault("Name", "").toString();
                 GameDataManager.saveOrUpdateGameInfo(updatedGameInfo, EXISTING_GAMES_FILE); // Ensure this saves to the database
+                dataManager.preloadDatabase().join();
                 message.sendMessage(chatId, "Game information has been successfully updated.");
+                showGameDetails(chatId, "updatedgame_" + (isWishlist ? gameName : appId), isWishlist);
             } else {
                 message.sendMessage(chatId, "Failed to update game information.");
             }
