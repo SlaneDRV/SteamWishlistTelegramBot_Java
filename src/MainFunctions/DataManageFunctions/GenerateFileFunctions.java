@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class GenerateFile {
+public class GenerateFileFunctions {
 
     public static final WishlistFunctions Wishlist = new WishlistFunctions();
 

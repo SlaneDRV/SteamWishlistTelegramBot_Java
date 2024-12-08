@@ -17,7 +17,7 @@ public class SortingFunctions {
         for (JSONObject game : wishlist) {
             String gameId = game.optString("ID");
             if (!gameId.isEmpty()) {
-                List<JSONObject> dbGame = FindExactGame.findGameByExactId(gameId, database);
+                List<JSONObject> dbGame = FindExactGameFunctions.findGameByExactId(gameId, database);
                 if (!dbGame.isEmpty()) {
                     JSONObject gameData = dbGame.get(0);
                     String releaseDate = gameData.optString("ReleaseDate");
@@ -56,7 +56,7 @@ public class SortingFunctions {
         for (JSONObject game : wishlist) {
             String gameId = game.optString("ID");
             if (!gameId.isEmpty()) {
-                List<JSONObject> dbGame = FindExactGame.findGameByExactId(gameId, database);
+                List<JSONObject> dbGame = FindExactGameFunctions.findGameByExactId(gameId, database);
                 if (!dbGame.isEmpty()) {
                     JSONObject gameData = dbGame.get(0);
                     int positiveReviews = gameData.optInt("PositiveReviews", 0);

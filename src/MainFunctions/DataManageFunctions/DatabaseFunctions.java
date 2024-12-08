@@ -11,21 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class Database {
+public class DatabaseFunctions {
 
-    // Новый метод для предзагрузки базы данных
     public static CompletableFuture<Void> preloadDatabase() {
         return CompletableFuture.runAsync(() -> {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
 
-                // Загружаем как список объектов
                 List<Map<String, Object>> gameList = objectMapper.readValue(
                         new File(DataManager.getGamesPath()),
                         new TypeReference<List<Map<String, Object>>>() {}
                 );
 
-                // Преобразуем список в Map для совместимости
                 DataManager.DATABASE = new HashMap<>();
                 for (Map<String, Object> game : gameList) {
                     String gameId = String.valueOf(game.get("ID"));
@@ -39,7 +36,6 @@ public class Database {
         });
     }
 
-    // Метод для чтения базы данных
     public static Map<String, Object> readDatabase() {
         if (DataManager.DATABASE == null || DataManager.DATABASE.isEmpty()) {
             System.out.println("Database is not loaded.");

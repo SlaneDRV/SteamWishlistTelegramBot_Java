@@ -1,7 +1,7 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.Database;
-import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.DatabaseFunctions;
+import MainFunctions.DataManageFunctions.FindExactGameFunctions;
 import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.json.JSONObject;
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Wishlist {
+public class WishlistHandler {
     private Handlers handler = new Handlers();
-    private Message message = new Message();
+    private MessageHandler message = new MessageHandler();
 
     private final WishlistFunctions Wishlist = new WishlistFunctions();
 
@@ -118,8 +118,8 @@ public class Wishlist {
         String gameName = call.getData().split("_", 2)[1];
         long chatId = call.getMessage().getChatId();
 
-        Map<String, Object> database = Database.readDatabase();
-        List<JSONObject> games = FindExactGame.findGameByExactName(gameName, database);
+        Map<String, Object> database = DatabaseFunctions.readDatabase();
+        List<JSONObject> games = FindExactGameFunctions.findGameByExactName(gameName, database);
 
         if (!games.isEmpty()) {
             JSONObject gameData = games.get(0);

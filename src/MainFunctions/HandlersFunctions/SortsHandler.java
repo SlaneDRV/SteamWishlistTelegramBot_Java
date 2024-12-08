@@ -1,6 +1,6 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.Database;
+import MainFunctions.DataManageFunctions.DatabaseFunctions;
 import MainFunctions.DataManageFunctions.SortingFunctions;
 import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Sorting {
+public class SortsHandler {
     private Handlers handler = new Handlers();
-    private Message message = new Message();
+    private MessageHandler message = new MessageHandler();
     private final WishlistFunctions Wishlist = new WishlistFunctions();
 
     public void handleSortCommand(long chatId) {
@@ -53,23 +53,31 @@ public class Sorting {
         }
     }
 
-    public void sortWishlistByDate(long chatId) {
-        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
-        Map<String, Object> database = Database.readDatabase();
-
-        List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByDate(wishlist, database);
-
-        if (sortedWishlist.isEmpty()) {
-            message.sendMessage(chatId, "Your wishlist is empty.");
-            return;
-        }
-
+    private InlineKeyboardMarkup createGameKeyboard(List<JSONObject> sortedWishlist) {
         InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
         for (JSONObject game : sortedWishlist) {
             String gameName = game.optString("Name");
-            String price = game.optDouble("Price", 0.0) != 0.0 ? String.valueOf(game.optDouble("Price")) : "Free";
+            String priceStr = game.optString("Price");
+
+            String price;
+
+            if (priceStr == null || priceStr.isEmpty() || priceStr.equalsIgnoreCase("N/A")) {
+                price = "Free";
+            } else {
+                try {
+
+                    double priceValue = Double.parseDouble(priceStr.replace("$", "").trim());
+                    if (priceValue == 0.0) {
+                        price = "Free";
+                    } else {
+                        price = "$" + priceStr;
+                    }
+                } catch (NumberFormatException e) {
+                    price = "Free";
+                }
+            }
 
             InlineKeyboardButton gameButton = new InlineKeyboardButton();
             gameButton.setText(gameName + " - " + price);
@@ -81,6 +89,22 @@ public class Sorting {
         }
 
         inlineMarkup.setKeyboard(rows);
+        return inlineMarkup;
+    }
+
+
+    public void sortWishlistByDate(long chatId) {
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
+        Map<String, Object> database = DatabaseFunctions.readDatabase();
+
+        List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByDate(wishlist, database);
+
+        if (sortedWishlist.isEmpty()) {
+            message.sendMessage(chatId, "Your wishlist is empty.");
+            return;
+        }
+
+        InlineKeyboardMarkup inlineMarkup = createGameKeyboard(sortedWishlist);
 
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -94,9 +118,10 @@ public class Sorting {
         }
     }
 
+
     public void sortWishlistByReviews(long chatId) {
-            List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
-        Map<String, Object> database = Database.readDatabase();
+        List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
+        Map<String, Object> database = DatabaseFunctions.readDatabase();
 
         List<JSONObject> sortedWishlist = SortingFunctions.sortWishlistByReviews(wishlist, database);
 
@@ -105,23 +130,7 @@ public class Sorting {
             return;
         }
 
-        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-
-        for (JSONObject game : sortedWishlist) {
-            String gameName = game.optString("Name");
-            String price = game.optDouble("Price", 0.0) != 0.0 ? String.valueOf(game.optDouble("Price")) : "Free";
-
-            InlineKeyboardButton gameButton = new InlineKeyboardButton();
-            gameButton.setText(gameName + " - " + price);
-            gameButton.setCallbackData("wishlist_" + gameName);
-
-            List<InlineKeyboardButton> row = new ArrayList<>();
-            row.add(gameButton);
-            rows.add(row);
-        }
-
-        inlineMarkup.setKeyboard(rows);
+        InlineKeyboardMarkup inlineMarkup = createGameKeyboard(sortedWishlist);
 
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -136,6 +145,7 @@ public class Sorting {
     }
 
 
+
     public void sortWishlistByAlphabet(long chatId) {
         List<JSONObject> wishlist = Wishlist.readWishlist(chatId);
 
@@ -146,23 +156,7 @@ public class Sorting {
             return;
         }
 
-        InlineKeyboardMarkup inlineMarkup = new InlineKeyboardMarkup();
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-
-        for (JSONObject game : sortedWishlist) {
-            String gameName = game.optString("Name");
-            String price = game.optDouble("Price", 0.0) != 0.0 ? String.valueOf(game.optDouble("Price")) : "Free";
-
-            InlineKeyboardButton gameButton = new InlineKeyboardButton();
-            gameButton.setText(gameName + " - " + price);
-            gameButton.setCallbackData("wishlist_" + gameName);
-
-            List<InlineKeyboardButton> row = new ArrayList<>();
-            row.add(gameButton);
-            rows.add(row);
-        }
-
-        inlineMarkup.setKeyboard(rows);
+        InlineKeyboardMarkup inlineMarkup = createGameKeyboard(sortedWishlist);
 
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -175,4 +169,5 @@ public class Sorting {
             e.printStackTrace();
         }
     }
+
 }

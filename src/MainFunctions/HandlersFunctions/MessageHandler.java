@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Message {
+public class MessageHandler {
     private Handlers handler = new Handlers();
     public void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage();
@@ -83,8 +83,7 @@ public class Message {
         sendMessageWithKeyboard(chatId, "Choose a search option or go back:", keyboardMarkup);
     }
 
-
-
+    //Message with navigation buttons
     public void sendMessageWithKeyboard(long chatId, String text, ReplyKeyboardMarkup keyboardMarkup) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -97,10 +96,7 @@ public class Message {
         }
     }
 
-
-
-
-
+    //Message with buttons
     public void sendMessageWithInlineKeyboard(long chatId, String text, InlineKeyboardMarkup keyboardMarkup) {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));

@@ -1,14 +1,15 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.*;
+import MainFunctions.DataManageFunctions.WishlistFunctions;
 import SteamAPI.GameProcessor;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PriceHandler {
 
@@ -33,7 +34,7 @@ public class PriceHandler {
         rowsInline.add(createRegionButtons());
         markup.setKeyboard(rowsInline);
 
-        Message message = new Message();
+        MessageHandler message = new MessageHandler();
         message.sendMessageWithInlineKeyboard(chatId, "Select a region to calculate total price:", markup);
     }
 
@@ -212,7 +213,7 @@ public class PriceHandler {
     }
 
     private void sendMessage(long chatId, String text) {
-        Message message = new Message();
+        MessageHandler message = new MessageHandler();
         message.sendMessage(chatId, text);
     }
 }

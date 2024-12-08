@@ -22,16 +22,16 @@ public class Handlers extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        Import Import = new Import();
-        Sorting sort = new Sorting();
-        TagCount tagCounter = new TagCount();
-        Download download = new Download();
-        Language language = new Language();
-        Wishlist wishlist = new Wishlist();
-        GameDetails game = new GameDetails();
-        Searchs search = new Searchs();
-        Removing remove = new Removing();
-        Message message = new Message();
+        ImportHandler Import = new ImportHandler();
+        SortsHandler sort = new SortsHandler();
+        TagCountHandler tagCounter = new TagCountHandler();
+        DownloadHandler download = new DownloadHandler();
+        LanguageHandler language = new LanguageHandler();
+        WishlistHandler wishlist = new WishlistHandler();
+        GameDetailsHandler game = new GameDetailsHandler();
+        SearchsHandler search = new SearchsHandler();
+        RemovalHandler remove = new RemovalHandler();
+        MessageHandler message = new MessageHandler();
         PriceHandler priceHandler = new PriceHandler();
 
         if (update.hasMessage() && update.getMessage().hasText()) {

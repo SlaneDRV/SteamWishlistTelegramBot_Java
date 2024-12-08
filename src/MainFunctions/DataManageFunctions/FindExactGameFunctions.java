@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FindExactGame {
+public class FindExactGameFunctions {
 
     public static List<JSONObject> findGameByExactName(String gameName, Map<String, Object> database) {
         System.out.println("Search game by exact name has been started.");

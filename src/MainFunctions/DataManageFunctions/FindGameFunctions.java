@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FindGame {
+public class FindGameFunctions {
 
     public static List<Map.Entry<String, JSONObject>> findGamesByTag(String searchTag, Map<String, Object> database) {
         System.out.println("Starting the search for games by tag...");
@@ -75,12 +75,23 @@ public class FindGame {
         return sortedResults.size() > 20 ? sortedResults.subList(0, 20) : sortedResults;
     }
 
+    /*
+         Calculates the similarity between two strings using the Levenshtein distance algorithm.
+         The similarity is represented as a value between 0 and 1, where 1 indicates identical strings
+         and 0 indicates completely different strings.
+     */
 
     private static double calculateLevenshteinSimilarity(String s1, String s2) {
         int distance = levenshteinDistance(s1, s2);
         return 1.0 - (double) distance / Math.max(s1.length(), s2.length());
     }
 
+    /*
+       Computes the Levenshtein distance between two strings.
+       The Levenshtein distance is a metric for measuring the edit distance
+       between two sequences, which is the minimum number of single-character
+       edits (insertions, deletions, or substitutions) required to transform one string into the other.
+     */
     private static int levenshteinDistance(String s1, String s2) {
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];
 

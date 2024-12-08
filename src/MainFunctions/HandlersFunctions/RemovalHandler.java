@@ -9,9 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class Removing {
+public class RemovalHandler {
 
-    private final Message message = new Message();
+    private final MessageHandler message = new MessageHandler();
     private final WishlistFunctions Wishlist = new WishlistFunctions();
     public void promptForGameRemoval(long chatId) {
         List<JSONObject> wishlist = Wishlist.readWishlist(chatId);

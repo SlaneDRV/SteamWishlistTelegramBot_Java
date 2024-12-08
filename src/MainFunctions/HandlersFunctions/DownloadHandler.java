@@ -1,6 +1,6 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.GenerateFile;
+import MainFunctions.DataManageFunctions.GenerateFileFunctions;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -9,10 +9,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Download {
-    private Message message = new Message();
+public class DownloadHandler {
+    private MessageHandler message = new MessageHandler();
 
-    private GenerateFile file = new GenerateFile();
+    private GenerateFileFunctions file = new GenerateFileFunctions();
     public void chooseDownloadFormat(long chatId) {
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
         markup.setResizeKeyboard(true);

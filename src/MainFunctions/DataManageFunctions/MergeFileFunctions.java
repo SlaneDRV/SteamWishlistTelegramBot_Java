@@ -4,7 +4,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MergeFile {
+public class MergeFileFunctions {
+
+    /*
+        This function compares the imported wishlist with the current wishlist of a user.
+        It adds new games from the imported wishlist to the current wishlist if they are not already present.
+     */
 
     public void mergeWishlists(long userId, List<JSONObject> importedData) {
 

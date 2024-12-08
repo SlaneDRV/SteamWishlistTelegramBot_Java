@@ -1,6 +1,6 @@
 package Tests.DataManager;
 
-import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.FindExactGameFunctions;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class FindExactGameTest {
     void testFindGameByExactName_Found() {
         // Проверка на успешное нахождение игры по имени
         String gameName = "Angry Bunny";
-        List<JSONObject> results = FindExactGame.findGameByExactName(gameName, database);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactName(gameName, database);
 
         assertNotNull(results);
         assertEquals(1, results.size());
@@ -56,7 +56,7 @@ public class FindExactGameTest {
     void testFindGameByExactName_NotFound() {
         // Проверка, если игра с таким именем не найдена
         String gameName = "Nonexistent Game";
-        List<JSONObject> results = FindExactGame.findGameByExactName(gameName, database);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactName(gameName, database);
 
         assertNotNull(results);
         assertTrue(results.isEmpty());
@@ -66,7 +66,7 @@ public class FindExactGameTest {
     void testFindGameByExactId_Found() {
         // Проверка на успешное нахождение игры по ID
         String gameId = "1235460";
-        List<JSONObject> results = FindExactGame.findGameByExactId(gameId, database);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactId(gameId, database);
 
         assertNotNull(results);
         assertEquals(1, results.size());
@@ -79,7 +79,7 @@ public class FindExactGameTest {
     void testFindGameByExactId_NotFound() {
         // Проверка, если игра с таким ID не найдена
         String gameId = "9999999";
-        List<JSONObject> results = FindExactGame.findGameByExactId(gameId, database);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactId(gameId, database);
 
         assertNotNull(results);
         assertTrue(results.isEmpty());
@@ -89,7 +89,7 @@ public class FindExactGameTest {
     void testFindGameByExactName_CaseInsensitive() {
         // Проверка на регистронезависимый поиск
         String gameName = "infinity castle dungeon";
-        List<JSONObject> results = FindExactGame.findGameByExactName(gameName, database);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactName(gameName, database);
 
         assertNotNull(results);
         assertEquals(1, results.size());
@@ -104,7 +104,7 @@ public class FindExactGameTest {
                 "invalidKey", "This is not a valid game object"
         );
 
-        List<JSONObject> results = FindExactGame.findGameByExactId("1235460", corruptedDatabase);
+        List<JSONObject> results = FindExactGameFunctions.findGameByExactId("1235460", corruptedDatabase);
 
         assertNotNull(results);
         assertTrue(results.isEmpty());

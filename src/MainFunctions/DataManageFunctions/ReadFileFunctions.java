@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ReadFile {
+public class ReadFileFunctions {
 
     public static List<JSONObject> readTxtFile(byte[] fileContent) {
         List<JSONObject> importedData = new ArrayList<>();

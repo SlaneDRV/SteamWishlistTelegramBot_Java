@@ -1,8 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.MergeFile;
+import MainFunctions.DataManageFunctions.MergeFileFunctions;
 import MainFunctions.Handlers;
-import MainFunctions.DataManageFunctions.ReadFile;
+import MainFunctions.DataManageFunctions.ReadFileFunctions;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,12 +14,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class Import {
+public class ImportHandler {
 
     private final Handlers handler = new Handlers();
-    private final Message message = new Message();
+    private final MessageHandler message = new MessageHandler();
 
-    private final MergeFile mergeFile = new MergeFile();
+    private final MergeFileFunctions mergeFile = new MergeFileFunctions();
 
     public void processImportFile(String fileId, String fileName, long chatId) {
         try {
@@ -34,14 +34,14 @@ public class Import {
             List<JSONObject> importedData;
             switch (fileExtension) {
                 case "txt":
-                    importedData = ReadFile.readTxtFile(downloadedFile);
+                    importedData = ReadFileFunctions.readTxtFile(downloadedFile);
                     break;
                 case "yaml":
                 case "yml":
-                    importedData = ReadFile.readYamlFile(downloadedFile);
+                    importedData = ReadFileFunctions.readYamlFile(downloadedFile);
                     break;
                 case "json":
-                    importedData = ReadFile.readJsonFile(downloadedFile);
+                    importedData = ReadFileFunctions.readJsonFile(downloadedFile);
                     break;
                 default:
                     message.sendMessage(chatId, "Unsupported file format. Please upload a txt or yaml file.");
@@ -57,6 +57,11 @@ public class Import {
         }
     }
 
+    /*
+    Downloads a file from Telegram servers as a byte array.
+    This method retrieves the file from the given file path on Telegram's servers,
+    reads its content, and converts it into a byte array for further processing.
+    */
     private byte[] downloadFileAsByteArray(String filePath) throws TelegramApiException, IOException {
 
         File downloadedFile = handler.downloadFile(filePath);

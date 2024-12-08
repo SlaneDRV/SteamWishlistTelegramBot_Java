@@ -1,7 +1,7 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.Database;
-import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.DatabaseFunctions;
+import MainFunctions.DataManageFunctions.FindExactGameFunctions;
 import org.json.JSONObject;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -9,14 +9,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Language {
+public class LanguageHandler {
 
-    private Message message = new Message();
+    private MessageHandler message = new MessageHandler();
     public void showAvailableLanguages(CallbackQuery call) {
         String gameId = call.getData().split("_", 2)[1];
         long chatId = call.getMessage().getChatId();
 
-        List<JSONObject> games = FindExactGame.findGameByExactId(gameId, Database.readDatabase());
+        List<JSONObject> games = FindExactGameFunctions.findGameByExactId(gameId, DatabaseFunctions.readDatabase());
         if (!games.isEmpty()) {
             JSONObject game = games.get(0);
 

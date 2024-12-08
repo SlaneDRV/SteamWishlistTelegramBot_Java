@@ -1,8 +1,8 @@
 package MainFunctions.HandlersFunctions;
 
 import MainFunctions.Config;
-import MainFunctions.DataManageFunctions.Database;
-import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.DatabaseFunctions;
+import MainFunctions.DataManageFunctions.FindExactGameFunctions;
 import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import SteamAPI.GameDataManager;
@@ -18,30 +18,29 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static SteamAPI.GameInfoUpdater.EXISTING_GAMES_FILE;
 
-public class GameDetails {
+public class GameDetailsHandler {
 
     private final Handlers handler = new Handlers();
-    private final Searchs search = new Searchs();
-    private final Message message = new Message();
-    private final Database dataManager = new Database();
+    private final SearchsHandler search = new SearchsHandler();
+    private final MessageHandler message = new MessageHandler();
+    private final DatabaseFunctions dataManager = new DatabaseFunctions();
     private final WishlistFunctions wishlistFunc = new WishlistFunctions();
     public void showGameDetails(long chatId, String callbackData, boolean isWishlist) {
         System.out.println("Processing game details callback...");
 
         String identifier = callbackData.split("_", 2)[1].trim();
         System.out.println("Game identifier extracted: " + identifier);
-        Map<String, Object> database = Database.readDatabase();
+        Map<String, Object> database = DatabaseFunctions.readDatabase();
 
         JSONObject gameData;
         if (isWishlist) {
             JSONObject gameDataWishlist = search.searchGameByExactNameInWishlist(identifier, chatId);
             if (gameDataWishlist != null) {
-                List<JSONObject> gameInfoList = FindExactGame.findGameByExactName(identifier, database);
+                List<JSONObject> gameInfoList = FindExactGameFunctions.findGameByExactName(identifier, database);
                 gameData = gameInfoList.isEmpty() ? null : gameInfoList.get(0);
             } else {
                 gameData = null;
@@ -157,7 +156,7 @@ public class GameDetails {
     public void updateGameInfo(long chatId, int appId, boolean isWishlist) {
         System.out.println("Updating game info for ID: " + appId);
 
-        Map<String, Object> database = Database.readDatabase();
+        Map<String, Object> database = DatabaseFunctions.readDatabase();
         JSONObject gameData = new JSONObject((Map<String, Object>) database.get(String.valueOf(appId)));
 
         // Check if the game was updated today

@@ -1,7 +1,7 @@
 package MainFunctions.HandlersFunctions;
 
-import MainFunctions.DataManageFunctions.Database;
-import MainFunctions.DataManageFunctions.FindExactGame;
+import MainFunctions.DataManageFunctions.DatabaseFunctions;
+import MainFunctions.DataManageFunctions.FindExactGameFunctions;
 import MainFunctions.DataManageFunctions.WishlistFunctions;
 import MainFunctions.Handlers;
 import org.jfree.chart.ChartFactory;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TagCount {
+public class TagCountHandler {
 
     private Handlers handler = new Handlers();
 
@@ -36,7 +36,7 @@ public class TagCount {
                 .collect(Collectors.toList());
 
         for (String gameId : gameIds) {
-            List<JSONObject> games = FindExactGame.findGameByExactId(gameId, Database.readDatabase());
+            List<JSONObject> games = FindExactGameFunctions.findGameByExactId(gameId, DatabaseFunctions.readDatabase());
             if (!games.isEmpty()) {
                 JSONObject game = games.get(0);
                 JSONArray tags = game.optJSONArray("TopTags");
@@ -75,6 +75,7 @@ public class TagCount {
         sendTagListText(chatId, tagListText.toString());
     }
 
+    // Creates a pie chart based on the top tags and their counts.
     private ByteArrayOutputStream createTagDistributionChart(List<Map.Entry<String, Integer>> topTags) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (Map.Entry<String, Integer> entry : topTags) {
@@ -92,6 +93,8 @@ public class TagCount {
         return outputStream;
     }
 
+    // Sends a pie chart image to the specified chat
+
     private void sendTagChart(long chatId, ByteArrayOutputStream outputStream) {
         SendPhoto photoMessage = new SendPhoto();
         photoMessage.setChatId(String.valueOf(chatId));
@@ -103,6 +106,8 @@ public class TagCount {
             e.printStackTrace();
         }
     }
+
+    //Sends the text representation of the top tags and associated games to the chat.
 
     private void sendTagListText(long chatId, String tagListText) {
         final int MAX_MESSAGE_LENGTH = 4096;
